@@ -1,0 +1,809 @@
+{
+  "additional_cases": [
+    {
+      "name": "both_fail",
+      "observed": {
+        "calls": 3,
+        "code": "providers_unavailable",
+        "fallback_failures": 1,
+        "fallback_state": "closed",
+        "primary_state": "open",
+        "status": 503
+      }
+    },
+    {
+      "name": "deadline",
+      "observed": {
+        "calls": 1,
+        "code": "deadline_exceeded",
+        "elapsed_ms": 2000,
+        "fallback_calls": 0,
+        "primary_calls": 1,
+        "status": 504
+      }
+    },
+    {
+      "name": "invalid",
+      "observed": {
+        "extra field": 422,
+        "invalid input": 422,
+        "invalid route": 422
+      }
+    },
+    {
+      "name": "non_retryable",
+      "observed": {
+        "400": {
+          "elapsed_ms": 10,
+          "fallback_calls": 0,
+          "http": 502,
+          "primary_calls": 1,
+          "retry_events": 0
+        },
+        "401": {
+          "elapsed_ms": 10,
+          "fallback_calls": 0,
+          "http": 502,
+          "primary_calls": 1,
+          "retry_events": 0
+        },
+        "403": {
+          "elapsed_ms": 10,
+          "fallback_calls": 0,
+          "http": 502,
+          "primary_calls": 1,
+          "retry_events": 0
+        }
+      }
+    },
+    {
+      "name": "concurrent_recovery",
+      "observed": {
+        "primary_calls": 3,
+        "probes": 1,
+        "providers": [
+          "fallback",
+          "fallback",
+          "fallback",
+          "fallback",
+          "primary"
+        ]
+      }
+    },
+    {
+      "name": "late_completion",
+      "observed": {
+        "a_provider": "primary",
+        "a_status": 200,
+        "b_provider": "fallback",
+        "primary_state": "open"
+      }
+    }
+  ],
+  "all_assertions_passed": true,
+  "assertions": [
+    {
+      "expected": {
+        "calls": 1,
+        "elapsed_ms": 10,
+        "provider": "primary"
+      },
+      "name": "R1: provider/calls/elapsed match contract",
+      "observed": {
+        "calls": 1,
+        "elapsed_ms": 10,
+        "provider": "primary"
+      },
+      "passed": true
+    },
+    {
+      "expected": {
+        "calls": 2,
+        "elapsed_ms": 120,
+        "provider": "primary"
+      },
+      "name": "R2: provider/calls/elapsed match contract",
+      "observed": {
+        "calls": 2,
+        "elapsed_ms": 120,
+        "provider": "primary"
+      },
+      "passed": true
+    },
+    {
+      "expected": {
+        "calls": 3,
+        "elapsed_ms": 130,
+        "provider": "fallback"
+      },
+      "name": "R3: provider/calls/elapsed match contract",
+      "observed": {
+        "calls": 3,
+        "elapsed_ms": 130,
+        "provider": "fallback"
+      },
+      "passed": true
+    },
+    {
+      "expected": {
+        "calls": 1,
+        "elapsed_ms": 10,
+        "provider": "fallback"
+      },
+      "name": "R4: provider/calls/elapsed match contract",
+      "observed": {
+        "calls": 1,
+        "elapsed_ms": 10,
+        "provider": "fallback"
+      },
+      "passed": true
+    },
+    {
+      "expected": {
+        "calls": 2,
+        "elapsed_ms": 20,
+        "provider": "fallback"
+      },
+      "name": "R5: provider/calls/elapsed match contract",
+      "observed": {
+        "calls": 2,
+        "elapsed_ms": 20,
+        "provider": "fallback"
+      },
+      "passed": true
+    },
+    {
+      "expected": {
+        "calls": 1,
+        "elapsed_ms": 10,
+        "provider": "fallback"
+      },
+      "name": "R6: provider/calls/elapsed match contract",
+      "observed": {
+        "calls": 1,
+        "elapsed_ms": 10,
+        "provider": "fallback"
+      },
+      "passed": true
+    },
+    {
+      "expected": {
+        "calls": 1,
+        "elapsed_ms": 10,
+        "provider": "primary"
+      },
+      "name": "R7: provider/calls/elapsed match contract",
+      "observed": {
+        "calls": 1,
+        "elapsed_ms": 10,
+        "provider": "primary"
+      },
+      "passed": true
+    },
+    {
+      "expected": 7,
+      "name": "gateway total completed",
+      "observed": 7,
+      "passed": true
+    },
+    {
+      "expected": 11,
+      "name": "gateway total provider_calls",
+      "observed": 11,
+      "passed": true
+    },
+    {
+      "expected": 7,
+      "name": "gateway total primary_calls",
+      "observed": 7,
+      "passed": true
+    },
+    {
+      "expected": 4,
+      "name": "gateway total fallback_calls",
+      "observed": 4,
+      "passed": true
+    },
+    {
+      "expected": 4,
+      "name": "gateway total fallback_requests",
+      "observed": 4,
+      "passed": true
+    },
+    {
+      "expected": "closed",
+      "name": "gateway total primary_final_state",
+      "observed": "closed",
+      "passed": true
+    },
+    {
+      "expected": null,
+      "name": "sequence: call caps (<=3 total, primary<=2, fallback<=1)",
+      "observed": null,
+      "passed": true
+    },
+    {
+      "expected": null,
+      "name": "sequence: no dispatch at/after deadline, no call may outlive it",
+      "observed": [],
+      "passed": true
+    },
+    {
+      "expected": 2,
+      "name": "baseline total completed",
+      "observed": 2,
+      "passed": true
+    },
+    {
+      "expected": 7,
+      "name": "baseline total provider_calls",
+      "observed": 7,
+      "passed": true
+    },
+    {
+      "expected": null,
+      "name": "both-fail: 503, 3 calls, P open, F closed with 1 failure",
+      "observed": {
+        "calls": 3,
+        "code": "providers_unavailable",
+        "fallback_failures": 1,
+        "fallback_state": "closed",
+        "primary_state": "open",
+        "status": 503
+      },
+      "passed": true
+    },
+    {
+      "expected": null,
+      "name": "both-fail: call caps (<=3 total, primary<=2, fallback<=1)",
+      "observed": null,
+      "passed": true
+    },
+    {
+      "expected": null,
+      "name": "both-fail: no dispatch at/after deadline, no call may outlive it",
+      "observed": [],
+      "passed": true
+    },
+    {
+      "expected": null,
+      "name": "deadline: 504, one call, no dispatch after the delayed retry wait",
+      "observed": {
+        "calls": 1,
+        "code": "deadline_exceeded",
+        "elapsed_ms": 2000,
+        "fallback_calls": 0,
+        "primary_calls": 1,
+        "status": 504
+      },
+      "passed": true
+    },
+    {
+      "expected": null,
+      "name": "deadline: call caps (<=3 total, primary<=2, fallback<=1)",
+      "observed": null,
+      "passed": true
+    },
+    {
+      "expected": null,
+      "name": "deadline: no dispatch at/after deadline, no call may outlive it",
+      "observed": [],
+      "passed": true
+    },
+    {
+      "expected": null,
+      "name": "invalid: 422 for bad route / input / extra field",
+      "observed": {
+        "extra field": 422,
+        "invalid input": 422,
+        "invalid route": 422
+      },
+      "passed": true
+    },
+    {
+      "expected": null,
+      "name": "invalid: zero provider calls",
+      "observed": null,
+      "passed": true
+    },
+    {
+      "expected": [
+        [
+          "closed",
+          1,
+          0
+        ],
+        [
+          "closed",
+          0,
+          0
+        ]
+      ],
+      "name": "invalid: circuits unchanged",
+      "observed": [
+        [
+          "closed",
+          1,
+          0
+        ],
+        [
+          "closed",
+          0,
+          0
+        ]
+      ],
+      "passed": true
+    },
+    {
+      "expected": null,
+      "name": "non-retryable 400: 502, one call, no fallback, no retry wait",
+      "observed": {
+        "elapsed_ms": 10,
+        "fallback_calls": 0,
+        "http": 502,
+        "primary_calls": 1,
+        "retry_events": 0
+      },
+      "passed": true
+    },
+    {
+      "expected": null,
+      "name": "non-retryable 401: 502, one call, no fallback, no retry wait",
+      "observed": {
+        "elapsed_ms": 10,
+        "fallback_calls": 0,
+        "http": 502,
+        "primary_calls": 1,
+        "retry_events": 0
+      },
+      "passed": true
+    },
+    {
+      "expected": null,
+      "name": "non-retryable 403: 502, one call, no fallback, no retry wait",
+      "observed": {
+        "elapsed_ms": 10,
+        "fallback_calls": 0,
+        "http": 502,
+        "primary_calls": 1,
+        "retry_events": 0
+      },
+      "passed": true
+    },
+    {
+      "expected": null,
+      "name": "concurrent recovery: exactly one probe, the rest skip primary",
+      "observed": {
+        "primary_calls": 3,
+        "probes": 1,
+        "providers": [
+          "fallback",
+          "fallback",
+          "fallback",
+          "fallback",
+          "primary"
+        ]
+      },
+      "passed": true
+    },
+    {
+      "expected": null,
+      "name": "late completion: older success cannot close a circuit newer failures opened",
+      "observed": {
+        "a_provider": "primary",
+        "a_status": 200,
+        "b_provider": "fallback",
+        "primary_state": "open"
+      },
+      "passed": true
+    }
+  ],
+  "baseline_direct_primary": {
+    "latency": {
+      "basis": "simulated ms, all requests incl. failures",
+      "max_ms": 10,
+      "mean_ms": 10,
+      "median_ms": 10,
+      "per_request_ms": [
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10
+      ]
+    },
+    "requests": [
+      {
+        "completed": true,
+        "elapsed_ms": 10,
+        "label": "R1",
+        "provider_calls": 1,
+        "request_id": "00000000-0000-4000-8000-000000000001",
+        "start_ms": 0
+      },
+      {
+        "completed": false,
+        "elapsed_ms": 10,
+        "label": "R2",
+        "provider_calls": 1,
+        "request_id": "00000000-0000-4000-8000-000000000002",
+        "start_ms": 1000
+      },
+      {
+        "completed": false,
+        "elapsed_ms": 10,
+        "label": "R3",
+        "provider_calls": 1,
+        "request_id": "00000000-0000-4000-8000-000000000003",
+        "start_ms": 2000
+      },
+      {
+        "completed": false,
+        "elapsed_ms": 10,
+        "label": "R4",
+        "provider_calls": 1,
+        "request_id": "00000000-0000-4000-8000-000000000004",
+        "start_ms": 3000
+      },
+      {
+        "completed": false,
+        "elapsed_ms": 10,
+        "label": "R5",
+        "provider_calls": 1,
+        "request_id": "00000000-0000-4000-8000-000000000005",
+        "start_ms": 8000
+      },
+      {
+        "completed": false,
+        "elapsed_ms": 10,
+        "label": "R6",
+        "provider_calls": 1,
+        "request_id": "00000000-0000-4000-8000-000000000006",
+        "start_ms": 9000
+      },
+      {
+        "completed": true,
+        "elapsed_ms": 10,
+        "label": "R7",
+        "provider_calls": 1,
+        "request_id": "00000000-0000-4000-8000-000000000007",
+        "start_ms": 14000
+      }
+    ],
+    "totals": {
+      "completed": 2,
+      "provider_calls": 7,
+      "requests": 7
+    }
+  },
+  "comparison": {
+    "calls_per_request_baseline": 1.0,
+    "calls_per_request_gateway": 1.571,
+    "completion_rate_baseline": 0.2857142857142857,
+    "completion_rate_gateway": 1.0
+  },
+  "configuration": {
+    "breaker": {
+      "failure_threshold": 2,
+      "open_duration_s": 5.0
+    },
+    "failure_keying": "(scenario, request_id, provider, provider-local attempt number)",
+    "failure_status": 503,
+    "policy": {
+      "fallback_max_calls": 1,
+      "max_body_bytes": 65536,
+      "max_calls": 3,
+      "per_call_timeout_s": 0.5,
+      "primary_max_calls": 2,
+      "retry_wait_s": 0.1,
+      "total_deadline_s": 2.0
+    },
+    "scenario": "acceptance-R1-R7",
+    "stub_call_ms": 10
+  },
+  "failure_schedule": [
+    {
+      "expected": {
+        "calls": 1,
+        "elapsed_ms": 10,
+        "provider": "primary"
+      },
+      "fallback": "success",
+      "primary": "success",
+      "request": "R1",
+      "request_id": "00000000-0000-4000-8000-000000000001",
+      "start_sim_ms": 0
+    },
+    {
+      "expected": {
+        "calls": 2,
+        "elapsed_ms": 120,
+        "provider": "primary"
+      },
+      "fallback": "success",
+      "primary": "fail, then success",
+      "request": "R2",
+      "request_id": "00000000-0000-4000-8000-000000000002",
+      "start_sim_ms": 1000
+    },
+    {
+      "expected": {
+        "calls": 3,
+        "elapsed_ms": 130,
+        "provider": "fallback"
+      },
+      "fallback": "success",
+      "primary": "fail, fail",
+      "request": "R3",
+      "request_id": "00000000-0000-4000-8000-000000000003",
+      "start_sim_ms": 2000
+    },
+    {
+      "expected": {
+        "calls": 1,
+        "elapsed_ms": 10,
+        "provider": "fallback"
+      },
+      "fallback": "success",
+      "primary": "fail if called",
+      "request": "R4",
+      "request_id": "00000000-0000-4000-8000-000000000004",
+      "start_sim_ms": 3000
+    },
+    {
+      "expected": {
+        "calls": 2,
+        "elapsed_ms": 20,
+        "provider": "fallback"
+      },
+      "fallback": "success",
+      "primary": "fail",
+      "request": "R5",
+      "request_id": "00000000-0000-4000-8000-000000000005",
+      "start_sim_ms": 8000
+    },
+    {
+      "expected": {
+        "calls": 1,
+        "elapsed_ms": 10,
+        "provider": "fallback"
+      },
+      "fallback": "success",
+      "primary": "fail if called",
+      "request": "R6",
+      "request_id": "00000000-0000-4000-8000-000000000006",
+      "start_sim_ms": 9000
+    },
+    {
+      "expected": {
+        "calls": 1,
+        "elapsed_ms": 10,
+        "provider": "primary"
+      },
+      "fallback": "success",
+      "primary": "success",
+      "request": "R7",
+      "request_id": "00000000-0000-4000-8000-000000000007",
+      "start_sim_ms": 14000
+    }
+  ],
+  "gateway": {
+    "circuit_events": [
+      {
+        "from": "closed",
+        "open_until_sim_ms": 7120,
+        "provider": "primary",
+        "reason": "failure_threshold_reached",
+        "request_id": "00000000-0000-4000-8000-000000000003",
+        "sim_t_ms": 2120,
+        "to": "open"
+      },
+      {
+        "from": "open",
+        "provider": "primary",
+        "reason": "cooldown_elapsed",
+        "request_id": "00000000-0000-4000-8000-000000000005",
+        "sim_t_ms": 8000,
+        "to": "half_open"
+      },
+      {
+        "attempt": 1,
+        "event": "probe_dispatched",
+        "provider": "primary",
+        "request_id": "00000000-0000-4000-8000-000000000005",
+        "sim_t_ms": 8000
+      },
+      {
+        "from": "half_open",
+        "open_until_sim_ms": 13010,
+        "provider": "primary",
+        "reason": "probe_failed",
+        "request_id": "00000000-0000-4000-8000-000000000005",
+        "sim_t_ms": 8010,
+        "to": "open"
+      },
+      {
+        "from": "open",
+        "provider": "primary",
+        "reason": "cooldown_elapsed",
+        "request_id": "00000000-0000-4000-8000-000000000007",
+        "sim_t_ms": 14000,
+        "to": "half_open"
+      },
+      {
+        "attempt": 1,
+        "event": "probe_dispatched",
+        "provider": "primary",
+        "request_id": "00000000-0000-4000-8000-000000000007",
+        "sim_t_ms": 14000
+      },
+      {
+        "from": "half_open",
+        "provider": "primary",
+        "reason": "probe_succeeded",
+        "request_id": "00000000-0000-4000-8000-000000000007",
+        "sim_t_ms": 14010,
+        "to": "closed"
+      }
+    ],
+    "latency": {
+      "basis": "simulated ms, all requests incl. failures",
+      "max_ms": 130,
+      "mean_ms": 44.3,
+      "median_ms": 10,
+      "per_request_ms": [
+        10,
+        120,
+        130,
+        10,
+        20,
+        10,
+        10
+      ]
+    },
+    "requests": [
+      {
+        "completed": true,
+        "elapsed_ms": 10,
+        "elapsed_ms_loop_check": 10,
+        "expected": {
+          "calls": 1,
+          "elapsed_ms": 10,
+          "provider": "primary"
+        },
+        "fallback_used": false,
+        "http_status": 200,
+        "label": "R1",
+        "provider": "primary",
+        "provider_calls": 1,
+        "request_id": "00000000-0000-4000-8000-000000000001",
+        "start_ms": 0
+      },
+      {
+        "completed": true,
+        "elapsed_ms": 120,
+        "elapsed_ms_loop_check": 120,
+        "expected": {
+          "calls": 2,
+          "elapsed_ms": 120,
+          "provider": "primary"
+        },
+        "fallback_used": false,
+        "http_status": 200,
+        "label": "R2",
+        "provider": "primary",
+        "provider_calls": 2,
+        "request_id": "00000000-0000-4000-8000-000000000002",
+        "start_ms": 1000
+      },
+      {
+        "completed": true,
+        "elapsed_ms": 130,
+        "elapsed_ms_loop_check": 130,
+        "expected": {
+          "calls": 3,
+          "elapsed_ms": 130,
+          "provider": "fallback"
+        },
+        "fallback_used": true,
+        "http_status": 200,
+        "label": "R3",
+        "provider": "fallback",
+        "provider_calls": 3,
+        "request_id": "00000000-0000-4000-8000-000000000003",
+        "start_ms": 2000
+      },
+      {
+        "completed": true,
+        "elapsed_ms": 10,
+        "elapsed_ms_loop_check": 10,
+        "expected": {
+          "calls": 1,
+          "elapsed_ms": 10,
+          "provider": "fallback"
+        },
+        "fallback_used": true,
+        "http_status": 200,
+        "label": "R4",
+        "provider": "fallback",
+        "provider_calls": 1,
+        "request_id": "00000000-0000-4000-8000-000000000004",
+        "start_ms": 3000
+      },
+      {
+        "completed": true,
+        "elapsed_ms": 20,
+        "elapsed_ms_loop_check": 20,
+        "expected": {
+          "calls": 2,
+          "elapsed_ms": 20,
+          "provider": "fallback"
+        },
+        "fallback_used": true,
+        "http_status": 200,
+        "label": "R5",
+        "provider": "fallback",
+        "provider_calls": 2,
+        "request_id": "00000000-0000-4000-8000-000000000005",
+        "start_ms": 8000
+      },
+      {
+        "completed": true,
+        "elapsed_ms": 10,
+        "elapsed_ms_loop_check": 10,
+        "expected": {
+          "calls": 1,
+          "elapsed_ms": 10,
+          "provider": "fallback"
+        },
+        "fallback_used": true,
+        "http_status": 200,
+        "label": "R6",
+        "provider": "fallback",
+        "provider_calls": 1,
+        "request_id": "00000000-0000-4000-8000-000000000006",
+        "start_ms": 9000
+      },
+      {
+        "completed": true,
+        "elapsed_ms": 10,
+        "elapsed_ms_loop_check": 10,
+        "expected": {
+          "calls": 1,
+          "elapsed_ms": 10,
+          "provider": "primary"
+        },
+        "fallback_used": false,
+        "http_status": 200,
+        "label": "R7",
+        "provider": "primary",
+        "provider_calls": 1,
+        "request_id": "00000000-0000-4000-8000-000000000007",
+        "start_ms": 14000
+      }
+    ],
+    "totals": {
+      "completed": 7,
+      "fallback_calls": 4,
+      "fallback_requests": 4,
+      "primary_calls": 7,
+      "primary_final_state": "closed",
+      "provider_calls": 11,
+      "requests": 7
+    },
+    "trace_event_count": 38
+  },
+  "labels": {
+    "execution_mode": "stub (no real provider was called)",
+    "expectations": "predictions from the contract; see assertions for observed vs expected",
+    "timing": "SIMULATED: event-loop clock, not wall-clock"
+  },
+  "measured_wall_clock": {
+    "note": "Real time this process took to execute the whole simulation. Not a latency of any request.",
+    "run_ms": 7.5
+  },
+  "remote_outcome_note": "A timeout leaves the provider outcome uncertain; a retry or fallback after one can duplicate work or billing. No exactly-once claim is made.",
+  "report_version": 1
+}

@@ -1,0 +1,38 @@
+ACCEPTANCE REPORT  [timings SIMULATED | providers STUB | wall-clock shown separately]
+
+req   start  http served by calls  elapsed  expected                   baseline
+R1        0   200 primary       1     10ms  primary/1/10ms             ok
+R2     1000   200 primary       2    120ms  primary/2/120ms            FAILED
+R3     2000   200 fallback      3    130ms  fallback/3/130ms           FAILED
+R4     3000   200 fallback      1     10ms  fallback/1/10ms            FAILED
+R5     8000   200 fallback      2     20ms  fallback/2/20ms            FAILED
+R6     9000   200 fallback      1     10ms  fallback/1/10ms            FAILED
+R7    14000   200 primary       1     10ms  primary/1/10ms             ok
+
+gateway : 7/7 completed, 11 calls (7 primary + 4 fallback), 4 requests used fallback, primary ends closed
+baseline: 2/7 completed, 7 calls
+calls/request: gateway 1.571  baseline 1.0
+latency (simulated ms, all requests): gateway mean 44.3 / max 130; baseline mean 10
+
+circuit events (simulated ms):
+    2120  primary  closed -> open  [failure_threshold_reached]  (cooldown until 7120)
+    8000  primary  open -> half_open  [cooldown_elapsed]
+    8000  primary  probe dispatched (05)
+    8010  primary  half_open -> open  [probe_failed]  (cooldown until 13010)
+   14000  primary  open -> half_open  [cooldown_elapsed]
+   14000  primary  probe dispatched (07)
+   14010  primary  half_open -> closed  [probe_succeeded]
+
+additional cases (fresh state each):
+  both_fail: {"calls": 3, "code": "providers_unavailable", "fallback_failures": 1, "fallback_state": "closed", "primary_state": "open", "status": 503}
+  deadline: {"calls": 1, "code": "deadline_exceeded", "elapsed_ms": 2000, "fallback_calls": 0, "primary_calls": 1, "status": 504}
+  invalid: {"extra field": 422, "invalid input": 422, "invalid route": 422}
+  non_retryable: {"400": {"elapsed_ms": 10, "fallback_calls": 0, "http": 502, "primary_calls": 1, "retry_events": 0}, "401": {"elapsed_ms": 10, "fallback_calls": 0, "http": 502, "primary_calls": 1, "retry_events": 0}, "403": {"elapsed_ms": 10, "fallback_calls": 0, "http": 502, "primary_calls": 1, "retry_events": 0}}
+  concurrent_recovery: {"primary_calls": 3, "probes": 1, "providers": ["fallback", "fallback", "fallback", "fallback", "primary"]}
+  late_completion: {"a_provider": "primary", "a_status": 200, "b_provider": "fallback", "primary_state": "open"}
+
+assertions: 31/31 passed
+measured wall-clock for the whole simulation: 7.5 ms
+note: a timeout leaves the remote outcome uncertain; retries/fallbacks may duplicate work or billing.
+
+JSON report written to evidence/acceptance-report.json

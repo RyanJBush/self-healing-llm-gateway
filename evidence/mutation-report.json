@@ -1,0 +1,335 @@
+{
+  "scope": "simulated-clock suite (slow real-clock tests skipped)",
+  "killed": 36,
+  "total": 36,
+  "killed_by_behavioural_assertion": 35,
+  "killed_only_by_white_box_assertion": 1,
+  "distinct_first_failing_tests": 19,
+  "reading": "Kill count is not 33 independent protections: several mutants share one aggregate test, one mutant is behaviourally equivalent, and two protections are redundant or config-conditional (see notes).",
+  "results": [
+    {
+      "id": "4xx-all-retryable",
+      "file": "gateway/engine.py",
+      "change": "every 4xx becomes retryable (the reviewer's concern)",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_acceptance.py::test_every_acceptance_assertion_passes - Ass...",
+      "note": ""
+    },
+    {
+      "id": "only-429-retryable",
+      "file": "gateway/engine.py",
+      "change": "408 stops being retryable",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_flow.py::test_retryable_status_retries_primary_once_after_100ms[408]",
+      "note": ""
+    },
+    {
+      "id": "5xx-not-retryable",
+      "file": "gateway/engine.py",
+      "change": "only 500-502 retryable",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_acceptance.py::test_every_acceptance_assertion_passes - Key...",
+      "note": ""
+    },
+    {
+      "id": "malformed-retryable",
+      "file": "gateway/engine.py",
+      "change": "malformed success is retried / charged to the circuit",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_breaker.py::test_non_qualifying_failures_never_open_the_circuit",
+      "note": ""
+    },
+    {
+      "id": "timeout-not-qualifying",
+      "file": "gateway/engine.py",
+      "change": "timeouts stop being retryable",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_acceptance.py::test_every_acceptance_assertion_passes - Ass...",
+      "note": ""
+    },
+    {
+      "id": "non-qualifying-charged-to-circuit",
+      "file": "gateway/engine.py",
+      "change": "4xx / malformed count toward opening the circuit",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_breaker.py::test_non_qualifying_failures_never_open_the_circuit",
+      "note": ""
+    },
+    {
+      "id": "ignore-retry-after",
+      "file": "gateway/engine.py",
+      "change": "Retry-After ignored",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_breaker.py::test_circuit_opens_mid_request_and_retry_is_skipped_without_using_an_attempt",
+      "note": ""
+    },
+    {
+      "id": "retry-after-boundary",
+      "file": "gateway/engine.py",
+      "change": "a wait that lands exactly on the deadline is allowed",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_budget.py::test_retry_after_equal_to_remaining_budget_does_not_fit",
+      "note": ""
+    },
+    {
+      "id": "no-deadline-recheck",
+      "file": "gateway/engine.py",
+      "change": "deadline not rechecked before dispatch",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_budget.py::test_nothing_is_dispatched_once_the_deadline_is_reached",
+      "note": ""
+    },
+    {
+      "id": "dispatch-at-deadline",
+      "file": "gateway/engine.py",
+      "change": "dispatch allowed exactly at the deadline",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_budget.py::test_nothing_is_dispatched_once_the_deadline_is_reached",
+      "note": ""
+    },
+    {
+      "id": "timeout-ignores-remaining",
+      "file": "gateway/engine.py",
+      "change": "per-call timeout not clipped to remaining budget",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_budget.py::test_retry_after_just_inside_budget_is_honoured",
+      "note": ""
+    },
+    {
+      "id": "final-deadline-check-removed",
+      "file": "gateway/engine.py",
+      "change": "503 instead of 504 when the deadline expired on the last call",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_budget.py::test_retry_after_just_inside_budget_is_honoured",
+      "note": ""
+    },
+    {
+      "id": "retry-sleeper-unbounded",
+      "file": "gateway/engine.py",
+      "change": "retry wait no longer cut off at the deadline",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_round2_regressions.py::test_sleeper_that_takes_60s_is_cut_off_at_the_deadline",
+      "note": ""
+    },
+    {
+      "id": "exception-text-logged",
+      "file": "gateway/engine.py",
+      "change": "log.exception prints the exception message and traceback again",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_round2_regressions.py::test_exception_text_with_prompt_and_credential_is_not_logged",
+      "note": ""
+    },
+    {
+      "id": "handler-guard-removed",
+      "file": "gateway/app.py",
+      "change": "no last-resort sanitized 500 outside the engine",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_round2_regressions.py::test_unexpected_error_outside_the_engine_is_a_sanitized_500_too",
+      "note": ""
+    },
+    {
+      "id": "primary-3-calls",
+      "file": "gateway/engine.py",
+      "change": "primary may be called three times",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_acceptance.py::test_every_acceptance_assertion_passes - Ass...",
+      "note": ""
+    },
+    {
+      "id": "fallback-retry-allowed",
+      "file": "gateway/engine.py",
+      "change": "fallback is retried (both redundant guards removed together)",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_breaker.py::test_failed_fallback_ends_the_request_even_with_unused_attempt_capacity",
+      "note": "Two redundant guards (call cap and `idx != 0`) back each other up; the mutant removes both. Removing either alone is equivalent."
+    },
+    {
+      "id": "probe-may-retry",
+      "file": "gateway/engine.py",
+      "change": "a half-open probe gets a same-provider retry",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_acceptance.py::test_every_acceptance_assertion_passes - Ass...",
+      "note": "With the default 5 s cooldown the breaker already refuses a second probe, so the engine's own no-retry-after-probe rule is only observable with a zero cooldown (test_probe_gets_no_retry_even_if_the_breaker_would_admit_another_probe)."
+    },
+    {
+      "id": "skip-consumes-attempt",
+      "file": "gateway/engine.py",
+      "change": "a skipped provider uses up an attempt",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_acceptance.py::test_every_acceptance_assertion_passes - Ass...",
+      "note": ""
+    },
+    {
+      "id": "fallback_used-always-true",
+      "file": "gateway/engine.py",
+      "change": "fallback_used reported for primary-only requests",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_acceptance.py::test_every_acceptance_assertion_passes - Ass...",
+      "note": ""
+    },
+    {
+      "id": "threshold-3",
+      "file": "gateway/config.py",
+      "change": "circuit needs three failures (the earlier assumption)",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_acceptance.py::test_every_acceptance_assertion_passes - Ass...",
+      "note": ""
+    },
+    {
+      "id": "cooldown-4s",
+      "file": "gateway/config.py",
+      "change": "cooldown 4000 ms",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_acceptance.py::test_circuit_timeline_matches_contract - ass...",
+      "note": ""
+    },
+    {
+      "id": "probe-release-stays-half-open",
+      "file": "gateway/breaker.py",
+      "change": "non-qualifying / cancelled probe leaves the circuit half-open",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_breaker.py::test_unit_cancelled_or_non_qualifying_probe_releases_slot_and_reopens_with_fresh_cooldown",
+      "note": ""
+    },
+    {
+      "id": "probe-release-keeps-slot",
+      "file": "gateway/breaker.py",
+      "change": "probe slot leaks on release",
+      "status": "KILLED",
+      "detection": "white-box only (behaviourally equivalent)",
+      "first_failing_test": "tests/test_breaker.py::test_unit_cancelled_or_non_qualifying_probe_releases_slot_and_reopens_with_fresh_cooldown",
+      "note": "Behaviourally equivalent: every path into half-open re-sets the probe flag, so a stale flag in the open state is never observable. Detected only by `assert b._probe_in_flight is False` in test_breaker.py (private field)."
+    },
+    {
+      "id": "probe-failure-keeps-old-cooldown",
+      "file": "gateway/breaker.py",
+      "change": "failed probe does not restart the cooldown",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_acceptance.py::test_every_acceptance_assertion_passes - Ass...",
+      "note": ""
+    },
+    {
+      "id": "two-probes-allowed",
+      "file": "gateway/breaker.py",
+      "change": "more than one probe in flight",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_acceptance.py::test_every_acceptance_assertion_passes - Ass...",
+      "note": ""
+    },
+    {
+      "id": "stale-success-honoured",
+      "file": "gateway/breaker.py",
+      "change": "stale success from an older generation is applied",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_breaker.py::test_unit_stale_success_after_recovery_cannot_reset_a_newer_count",
+      "note": ""
+    },
+    {
+      "id": "stale-failure-honoured",
+      "file": "gateway/breaker.py",
+      "change": "stale failure from an older generation is applied",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_breaker.py::test_unit_stale_failure_cannot_reopen_a_recovered_circuit",
+      "note": ""
+    },
+    {
+      "id": "success-does-not-reset",
+      "file": "gateway/breaker.py",
+      "change": "a success no longer resets the failure count",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_acceptance.py::test_every_acceptance_assertion_passes - Ass...",
+      "note": ""
+    },
+    {
+      "id": "failure-count-reset-by-release",
+      "file": "gateway/breaker.py",
+      "change": "a non-qualifying outcome resets the count",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_acceptance.py::test_every_acceptance_assertion_passes - Ass...",
+      "note": ""
+    },
+    {
+      "id": "body-read-unbounded",
+      "file": "gateway/app.py",
+      "change": "slow body not bounded by the deadline",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_budget.py::test_body_not_complete_by_deadline_is_504_with_zero_calls[2.5]",
+      "note": ""
+    },
+    {
+      "id": "disconnect-ignored",
+      "file": "gateway/app.py",
+      "change": "client disconnect no longer cancels the work",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_cancel.py::test_disconnect_during_call_cancels_work_and_makes_no_further_calls",
+      "note": ""
+    },
+    {
+      "id": "unknown-fields-allowed",
+      "file": "gateway/validation.py",
+      "change": "extra fields accepted",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_acceptance.py::test_every_acceptance_assertion_passes - Ass...",
+      "note": ""
+    },
+    {
+      "id": "whitespace-input-allowed",
+      "file": "gateway/validation.py",
+      "change": "whitespace-only input accepted",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_acceptance.py::test_every_acceptance_assertion_passes - Ass...",
+      "note": ""
+    },
+    {
+      "id": "uppercase-uuid-allowed",
+      "file": "gateway/validation.py",
+      "change": "non-canonical uppercase UUID accepted",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_openapi.py::test_schema_and_implementation_agree_on_invalid_requests[req4]",
+      "note": ""
+    },
+    {
+      "id": "duplicate-keys-allowed",
+      "file": "gateway/validation.py",
+      "change": "duplicate JSON keys accepted",
+      "status": "KILLED",
+      "detection": "behavioural",
+      "first_failing_test": "tests/test_validation.py::test_malformed_json_rejected[raw8] - Asserti...",
+      "note": ""
+    }
+  ]
+}
