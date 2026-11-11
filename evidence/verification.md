@@ -24,8 +24,11 @@ all acceptance assertions using the installed package.
 
 ## GitHub CI
 
-Pending the first published workflow run. The workflow tests Windows and Ubuntu on
-Python 3.11, 3.12, and 3.13, then runs the mutation checks.
+[Publication CI passed](https://github.com/RyanJBush/self-healing-llm-gateway/actions/runs/42944790109)
+on code commit `ebd21041decd96731503f32ad5b7a31380f9b970`: all six Windows/Ubuntu
+Python 3.11, 3.12, and 3.13 test-and-acceptance jobs passed, followed by the mutation job.
+[Recorded job results](ci-results.json). The final publication status update changes
+documentation and evidence only; the tested code is unchanged.
 
 ## Still outside verified scope
 

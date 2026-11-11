@@ -1,5 +1,8 @@
 # Self-Healing LLM Gateway (MVP)
 
+[![CI](https://github.com/RyanJBush/self-healing-llm-gateway/actions/workflows/ci.yml/badge.svg)](https://github.com/RyanJBush/self-healing-llm-gateway/actions/workflows/ci.yml)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 Local, non-streaming `POST /v1/generations` with two ordered providers (`primary`, then
 `fallback`), gateway-owned retries, a total deadline, and per-provider circuit breakers.
 One process, one worker, localhost only. **No authentication: do not expose it.**
@@ -144,8 +147,9 @@ Most tests run on `gateway.simclock.SimulatedLoop` (a simulated monotonic clock)
 real 2000 / 500 / 100 ms policy is checked exactly. `tests/test_live_server.py` (real
 uvicorn) and `tests/test_http_integration.py` (real HTTP provider against a local server)
 use the real clock. CI: `.github/workflows/ci.yml` (tests on Ubuntu and Windows for Python
-3.11-3.13, then the acceptance report and a mutation job). **Pending: this workflow has not yet
-been run on GitHub.**
+3.11-3.13, then the acceptance report and a mutation job). The first CI run exposed an
+early-wakeup retry bug on Windows/Python 3.11; v0.2.2 fixes it without weakening the
+minimum-delay assertion. See [the correction](evidence/verification.md#publication-timing-correction-v022).
 
 ### What the mutation result does and does not show
 
