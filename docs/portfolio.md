@@ -26,7 +26,7 @@ requests using **11 provider calls**; a direct-primary baseline completed **2/7*
 These are stub results with simulated request timings, not real-provider reliability,
 latency, or cost claims.
 
-The reviewed suite contained **380 passing tests**, including real local HTTP timeout and
+The reviewed suite contained **382 passing tests**, including real local HTTP timeout and
 client-disconnect checks. Independent review found and verified fixes for an unbounded
 retry sleeper and exception messages leaking into logs.
 

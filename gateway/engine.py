@@ -404,9 +404,15 @@ class Gateway:
                 # The wait itself is bounded by the absolute deadline: a sleeper that
                 # stalls or never returns is cancelled at the deadline, not awaited.
                 bound = asyncio.timeout_at(deadline)
+                not_before = loop.time() + wait
                 try:
                     async with bound:
                         await self._sleep(wait)
+                        # Event-loop timers may wake one clock-resolution early.
+                        # Preserve the minimum delay, including Retry-After, while
+                        # retaining the same absolute deadline for every re-wait.
+                        while loop.time() < not_before:
+                            await self._sleep(not_before - loop.time())
                 except TimeoutError:
                     if not bound.expired():
                         raise  # the sleeper's own error: a defect, not our deadline

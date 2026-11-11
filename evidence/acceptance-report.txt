@@ -32,7 +32,7 @@ additional cases (fresh state each):
   late_completion: {"a_provider": "primary", "a_status": 200, "b_provider": "fallback", "primary_state": "open"}
 
 assertions: 31/31 passed
-measured wall-clock for the whole simulation: 7.5 ms
+measured wall-clock for the whole simulation: 7.6 ms
 note: a timeout leaves the remote outcome uncertain; retries/fallbacks may duplicate work or billing.
 
 JSON report written to evidence/acceptance-report.json

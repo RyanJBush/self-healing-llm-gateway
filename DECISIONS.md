@@ -124,3 +124,11 @@ the OpenAPI document, and a real-HTTP provider for the local timeout integration
 Added at the reviewer's request: `.github/workflows/ci.yml`, `docs/architecture.md`
 (Mermaid, rendered and checked), and README sections for the verified comparison, failure
 policy and limitations. No new product features.
+
+## G. Publication CI timing correction (v0.2.2)
+
+Windows/Python 3.11 CI exposed a retry after 94 ms rather than the configured minimum
+100 ms. Keep the live assertion. The engine rechecks an absolute monotonic not-before
+target after every sleep, retaining the total-deadline timeout around all waits.
+Two deterministic regression cases cover the default delay and upstream Retry-After.
+See [verification](evidence/verification.md#publication-timing-correction-v022).

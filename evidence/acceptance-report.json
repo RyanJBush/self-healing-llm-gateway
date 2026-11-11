@@ -802,7 +802,7 @@
   },
   "measured_wall_clock": {
     "note": "Real time this process took to execute the whole simulation. Not a latency of any request.",
-    "run_ms": 7.5
+    "run_ms": 7.6
   },
   "remote_outcome_note": "A timeout leaves the provider outcome uncertain; a retry or fallback after one can duplicate work or billing. No exactly-once claim is made.",
   "report_version": 1
